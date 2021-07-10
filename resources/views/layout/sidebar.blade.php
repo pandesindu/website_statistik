@@ -50,7 +50,17 @@
                     <span>point biserial</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('ujit.index')}}">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    <span>Uji T</span></a>
+            </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('anava.index')}}">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    <span>Uji anava</span></a>
+            </li>
 
 
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Liliefors;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\PointBiserialController;
 use App\Http\Controllers\ProdukMomentController;
+use App\Http\Controllers\UjiAnavaController;
+use App\Http\Controllers\UjiTController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,3 +49,7 @@ Route::post('/import', [ProdukMomentController::class, 'importnilai'])->name('im
 Route::resource('pointbiserial', PointBiserialController::class);
 Route::get('/export', [PointBiserialController::class, 'exportnilai'])->name('exportnilai');
 Route::post('/import', [PointBiserialController::class, 'importnilai'])->name('importnilai');
+
+Route::resource('ujit', UjiTController::class);
+
+Route::resource('anava', UjiAnavaController::class);

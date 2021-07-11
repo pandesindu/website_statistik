@@ -1,6 +1,6 @@
 @extends('layout.v_template')
 
-@section('title', 'Liliefors')
+@section('title', 'Korelasi Point Biserial')
 @section('content')
 
 @if ($message = Session::get('success'))
@@ -73,8 +73,8 @@
                         <th>{{ $i+1 }}</th>
                         <td>{{ $nilai[$i]->nilai}}</td>
                         <td>{{ $nilai[$i]->status}}</td>
-                        <td>{{ $XminXt[$i]}}</td>
-                        <td>{{ $XminXtKuadrat[$i]}}</td>
+                        <td>{{ number_format($XminXt[$i], 4)}}</td>
+                        <td>{{number_format ($XminXtKuadrat[$i], 4)}}</td>
                         <td>
                             <form action="{{route('pointbiserial.destroy', $nilai[$i]->id)}}" method="POST">
                                 @csrf
@@ -90,11 +90,11 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th>Rata - Rata :</th>
+                        <td>{{number_format($xt, 4)}}</td>
                         <td></td>
-                        <td>mean : {{$xt}}</td>
                         <td></td>
-                        <td></td>
-                        <td>{{$sigma}}</td>
+                        <td>{{number_format($sigma, 4)}}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -103,7 +103,7 @@
 
             <div class="col-12">
                 <div class="float-lg-right">
-                    <form action="{{route('importnilai')}}" method="POST" enctype="multipart/form-data"
+                    <form action="{{route('importBiserial')}}" method="POST" enctype="multipart/form-data"
                         class="form-inline">
                         @csrf
                         <div class="input-group">
@@ -123,7 +123,7 @@
             </div>
 
             <div class="col-2">
-                <div class="float-left"><a href="{{route('exportnilai')}}"> <button type="button"
+                <div class="float-left"><a href="{{route('exportBiserial')}}"> <button type="button"
                             class="btn btn-success">
                             <i class="fa fa-download mx-1" aria-hidden="true"></i> export</button></a></div>
             </div>
@@ -139,7 +139,7 @@
                             <h6 class="mb-0 ">X1 </h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$x1}}
+                            {{number_format($x1, 2)}}
                         </div>
                     </div>
                     <hr>
@@ -148,7 +148,7 @@
                             <h6 class="mb-0">X2</h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$x2}}
+                            {{number_format($x2, 2)}}
                         </div>
                     </div>
                     <hr>
@@ -157,7 +157,7 @@
                             <h6 class="mb-0">SDt</h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$sdt}}
+                            {{number_format($sdt, 4)}}
                         </div>
                     </div>
                     <hr>
@@ -166,7 +166,7 @@
                             <h6 class="mb-0">p</h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$p}}
+                            {{number_format($p, 4)}}
                         </div>
                     </div>
                     <hr>
@@ -175,7 +175,7 @@
                             <h6 class="mb-0">q</h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$q}}
+                            {{number_format($q, 4)}}
                         </div>
                     </div>
 
@@ -185,7 +185,7 @@
                             <h6 class="mb-0">rbis</h6>
                         </div>
                         <div class="col-sm-2 text-secondary">
-                            {{$rbis}}
+                            {{number_format($rbis, 4)}}
                         </div>
                     </div>
 

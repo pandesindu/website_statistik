@@ -29,8 +29,8 @@
                             <td> {{ $fkum2[$i] }}</td>
                             <td> {{ $Zi[$i] }}</td>
                             <td> {{ $fZi[$i] }}</td>
-                            <td> {{ $sZi[$i] }}</td>
-                            <td> {{ $lilliefors[$i] }}</td>
+                            <td> {{ number_format($sZi[$i], 4) }}</td>
+                            <td> {{ number_format($lilliefors[$i], 4) }}</td>
                             </tr>
                             @endfor
                             <tr class="text-bold">
@@ -41,7 +41,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td> {{ $totalLillie }}</td>
+                                <td> {{ number_format($totalLillie, 4) }}</td>
                             </tr>
                     </tbody>
                 </table>

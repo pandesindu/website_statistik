@@ -1,6 +1,6 @@
 @extends('layout.v_template')
 
-@section('title', 'Liliefors')
+@section('title', 'Uji Anava Satu Jalur')
 @section('content')
 
 
@@ -32,20 +32,28 @@
 
             <div class="row">
                 <div class="col-12">
-                    <form action="{{route('ujit.store')}}" method="POST" enctype="multipart/form-data"
+                    <form action="{{route('anava.store')}}" method="POST" enctype="multipart/form-data"
                         class="form-inline">
                         @csrf
                         <div class=" form-group mx-sm-3">
-                            <label class="sr-only">Masukan Nilai X</label>
+                            <label class="sr-only">Masukan Nilai X1</label>
                             <input type="number" class="form-control @error('x2')  @enderror" name="x1"
                                 placeholder="@error('x1') {{$message}} @enderror masukan nilai X1">
                         </div>
 
                         <div class=" form-group mx-sm-3">
-                            <label class="sr-only">Masukan Nilai Y</label>
+                            <label class="sr-only">Masukan Nilai X2</label>
                             <input type="number" class="form-control @error('x2')  @enderror" name="x2"
-                                placeholder="@error('x1') {{$message}} @enderror masukan nilai X2">
+                                placeholder="@error('x2') {{$message}} @enderror masukan nilai X2">
                         </div>
+
+
+                        <div class=" form-group mx-sm-3">
+                            <label class="sr-only">Masukan Nilai X3</label>
+                            <input type="number" class="form-control @error('x2')  @enderror" name="x3"
+                                placeholder="@error('x3') {{$message}} @enderror masukan nilai X3">
+                        </div>
+
 
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <div class="mx-sm-3 text-danger text-sm">@error ('x1') {{$message}} @enderror</div>
@@ -83,10 +91,10 @@
                         <td>{{$xtotal[$i]}}</td>
                         <td>{{$xtotalkuadrat[$i]}}</td>
                         <td>
-                            <form action="{{route('ujit.destroy',  $anava[$i]->id)}}" method="POST">
+                            <form action="{{route('anava.destroy',  $anava[$i]->id)}}" method="POST">
                                 @csrf
                                 @method('Delete')
-                                <a href="{{route('ujit.edit', $anava[$i]->id)}}"> <button type="button"
+                                <a href="{{route('anava.edit', $anava[$i]->id)}}"> <button type="button"
                                         class="btn btn-primary btn-sm">
                                         Edit</button></a>
                                 <button type="Submit" class="btn btn-danger btn-sm">Delete </button>
@@ -120,12 +128,12 @@
                         </tr>
 
                         <tr>
-                            <th>mean :</th>
-                            <td>{{$avgX1}}</td>
+                            <th>Rata - Rata :</th>
+                            <td>{{number_format($avgX1, 2)}}</td>
                             <td></td>
-                            <td>{{$avgX2}}</td>
+                            <td>{{number_format($avgX2, 2)}}</td>
                             <td></td>
-                            <td>{{$avgX3}}</td>
+                            <td>{{number_format($avgX3, 2)}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -136,7 +144,7 @@
 
             <div class=" col-12">
                 <div class="float-lg-right">
-                    <form action="{{route('importnilai')}}" method="POST" enctype="multipart/form-data"
+                    <form action="{{route('importAnava')}}" method="POST" enctype="multipart/form-data"
                         class="form-inline">
                         @csrf
                         <div class="input-group">
@@ -156,7 +164,7 @@
             </div>
 
             <div class="col-2">
-                <div class="float-left"><a href="{{route('exportnilai')}}"> <button type="button"
+                <div class="float-left"><a href="{{route('exportAnava')}}"> <button type="button"
                             class="btn btn-success">
                             <i class="fa fa-download mx-1" aria-hidden="true"></i> export</button></a></div>
             </div>
@@ -182,19 +190,19 @@
                 <tbody>
                     <tr>
                         <th>Antar :</th>
-                        <td>{{$JKA}}</td>
+                        <td>{{number_format($JKA, 4)}}</td>
                         <td>{{$DKA}}</td>
-                        <td>{{$RJKA}}</td>
-                        <td>{{$F}}</td>
-                        <td></td>
-                        <td></td>
+                        <td>{{number_format($RJKA, 4)}}</td>
+                        <td>{{number_format($F, 4)}}</td>
+                        <td>{{$fTabel, 4}}</td>
+                        <td>{{$status}}</td>
                     </tr>
 
                     <tr>
                         <th>Dalam :</th>
-                        <td>{{$jkd}}</td>
+                        <td>{{number_format($jkd, 4)}}</td>
                         <td>{{$dkd}}</td>
-                        <td>{{$rjkd}}</td>
+                        <td>{{number_format($rjkd, 4)}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -212,7 +220,7 @@
 
                     <tr>
                         <th>Total :</th>
-                        <td>{{$jkt}}</td>
+                        <td>{{number_format($jkt, 4)}}</td>
                         <td>{{$dkt}}</td>
                         <td></td>
                         <td></td>

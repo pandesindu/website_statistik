@@ -29,27 +29,31 @@ Route::get('/', function () {
 Route::get('/profil', function () {
     return view('profil');
 });
-//Route::get('/', [NilaiController::class, 'index']);
+
 Route::resource('nilai', NilaiController::class);
-//Route::get('/export', 'NilaiController@exportnilai')->name('exportnilai');
 Route::get('/export', [NilaiController::class, 'exportnilai'])->name('exportnilai');
 Route::post('/import', [NilaiController::class, 'importnilai'])->name('importnilai');
-
 Route::patch('/delete', [NilaiController::class, 'delete']);
 
 Route::get('/bergolong', [Berkelompok::class, 'databergolong']);
 Route::get('/chi', [ChiKuadrat::class, 'chikuadrat']);
 Route::get('/liliefors', [Liliefors::class, 'lilliefors']);
 
+
 Route::resource('produkmoment', ProdukMomentController::class);
-Route::get('/export', [ProdukMomentController::class, 'exportnilai'])->name('exportnilai');
-Route::post('/import', [ProdukMomentController::class, 'importnilai'])->name('importnilai');
+Route::get('/exportProdukMoment', [ProdukMomentController::class, 'exportnilai'])->name('exportMoment');
+Route::post('/importProdukMoment', [ProdukMomentController::class, 'importnilai'])->name('importMoment');
 
 
 Route::resource('pointbiserial', PointBiserialController::class);
-Route::get('/export', [PointBiserialController::class, 'exportnilai'])->name('exportnilai');
-Route::post('/import', [PointBiserialController::class, 'importnilai'])->name('importnilai');
+Route::get('/exportPointBiserial', [PointBiserialController::class, 'exportnilai'])->name('exportBiserial');
+Route::post('/importPointBiserial', [PointBiserialController::class, 'importnilai'])->name('importBiserial');
 
 Route::resource('ujit', UjiTController::class);
+Route::get('/exportUjiT', [UjiTController::class, 'exportnilai'])->name('exportUJiT');
+Route::post('/importUjiT', [UjiTController::class, 'importnilai'])->name('importUjiT');
+
 
 Route::resource('anava', UjiAnavaController::class);
+Route::get('/exportAnava', [UjiAnavaController::class, 'exportnilai'])->name('exportAnava');
+Route::post('/importAnava', [UjiAnavaController::class, 'importnilai'])->name('importAnava');

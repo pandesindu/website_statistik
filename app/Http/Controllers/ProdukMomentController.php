@@ -191,10 +191,10 @@ class ProdukMomentController extends Controller
         Storage::delete($path);
         if ($import) {
             //redirect
-            return redirect()->route('produkmoment.index ')->with(['success' => 'Data Berhasil Diimport!']);
+            return redirect()->route('produkmoment.index')->with(['success' => 'Data Berhasil Diimport!']);
         } else {
             //redirect
-            return redirect()->route('produkmoment.index ')->with(['error' => 'Data Gagal Diimport!']);
+            return redirect()->route('produkmoment.index')->with(['error' => 'Data Gagal Diimport!']);
         }
     }
 }

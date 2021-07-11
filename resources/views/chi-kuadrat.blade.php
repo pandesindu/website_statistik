@@ -37,7 +37,7 @@
                             <td> {{ $zTabelAtasFix[$i] }}</td>
                             <td> {{ $lprop[$i] }}</td>
                             <td> {{ $fe[$i] }}</td>
-                            <td> {{ $kai[$i] }}</td>
+                            <td> {{ number_format($kai[$i], 4) }}</td>
                             </tr>
 
                             @endfor
@@ -53,7 +53,7 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>{{ $totalchi }}</th>
+                                <th>{{ number_format($totalchi, 4) }}</th>
                             </tr>
                     </tbody>
                 </table>

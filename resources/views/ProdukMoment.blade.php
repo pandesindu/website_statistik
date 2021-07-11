@@ -1,6 +1,6 @@
 @extends('layout.v_template')
 
-@section('title', 'Liliefors')
+@section('title', 'Korelasi Produk Moment')
 @section('content')
 
 @if ($message = Session::get('success'))
@@ -76,9 +76,9 @@
                         <td>{{ $moments[$i]->Y_besar}}</td>
                         <td>{{ $xKecil[$i] }}</td>
                         <td>{{ $yKecil[$i] }}</td>
-                        <td>{{ $xKuadrat[$i] }}</td>
-                        <td>{{ $yKuadrat[$i] }}</td>
-                        <td>{{ $xKaliY[$i] }}</td>
+                        <td>{{ number_format($xKuadrat[$i], 4) }}</td>
+                        <td>{{ number_format($yKuadrat[$i], 4) }}</td>
+                        <td>{{ number_format($xKaliY[$i], 4) }}</td>
                         <td>
                             <form action="{{route('produkmoment.destroy', $moments[$i]->id)}}" method="POST">
                                 @csrf
@@ -111,12 +111,12 @@
 
             <table class="table text-left mt-1">
                 <tr>
-                    <td> <b>Produk Moment : </b> &nbsp {{ $korelasimoment }} </td>
+                    <td> <b>Produk Moment : </b> &nbsp {{ number_format($korelasimoment, 4) }} </td>
                 </tr>
             </table>
             <div class=" col-12">
                 <div class="float-lg-right">
-                    <form action="{{route('importnilai')}}" method="POST" enctype="multipart/form-data"
+                    <form action="{{route('importMoment')}}" method="POST" enctype="multipart/form-data"
                         class="form-inline">
                         @csrf
                         <div class="input-group">
@@ -137,7 +137,7 @@
             </div>
 
             <div class="col-2">
-                <div class="float-left"><a href="{{route('exportnilai')}}"> <button type="button"
+                <div class="float-left"><a href="{{route('exportMoment')}}"> <button type="button"
                             class="btn btn-success">
                             <i class="fa fa-download mx-1" aria-hidden="true"></i> export</button></a></div>
             </div>

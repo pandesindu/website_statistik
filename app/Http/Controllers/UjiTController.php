@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UjiTExport;
+use App\Imports\UjiTImport;
+use App\Models\Tb_T;
 use App\Models\UjiT;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UjiTController extends Controller
 {
@@ -79,14 +84,26 @@ class UjiTController extends Controller
 
        //rumus korelasi    
         $korelasimoment = number_format($sumX1X2/sqrt($sumX1Kuadrat*$sumX2Kuadrat), 2);  
-       
-            
-       
 
         //nilaiUjiT
        $nilaiUjiT = number_format($rata2x1 - $rata2x2 / sqrt( ( ($variansX1/$n1)+($variansX2/$n2)) - 2*$korelasimoment*( ($sdX1/sqrt($n1)) * ($sdX2/sqrt($n2)) ) ), 2 );       
 
-        return view('/ujiT', ['ujiT' => $ujiT,
+       //mengecek tabel T, butuh $derajat bebas dan label nilai = 0.05
+       $derajatBebas = $jumlahData - 1;
+       $labelnilai = "limapersen";       
+
+       //1. cek di tabel T
+        $kolom = Tb_T::where('df', '=', $derajatBebas)->get();                       
+        $TTabel = $kolom[0]->$labelnilai;  
+
+        //cek keterangan
+        if ($nilaiUjiT < $TTabel){
+            $status =  "Diterima";
+        } else {
+            $status =   "Tidak Diterima";
+        }
+       
+       return view('/ujiT', ['ujiT' => $ujiT,
                                         'rata2x1' => $rata2x1,
                                         'rata2x2' => $rata2x2,
                                         'sdX1' => $sdX1,
@@ -94,6 +111,9 @@ class UjiTController extends Controller
                                         'variansX1' => $variansX1,
                                         'variansX2' => $variansX2,
                                         'nilaiUjiT' => $nilaiUjiT,
+
+                                        'TTabel' => $TTabel,
+                                        'status' => $status,
                                     ]);
     }
 
@@ -177,7 +197,7 @@ class UjiTController extends Controller
         UjiT::where('id', $id)->update($validasi);
         return redirect('ujit')->with([
             'updated' => 'Data Berhasil Diperbaharui'
-        ]);;
+        ]);
     }
 
     /**
@@ -196,5 +216,29 @@ class UjiTController extends Controller
         return redirect('ujit')->with([
             'deleted' => 'Data Berhasil Dihapus'
         ]);;
+    }
+
+    public function exportnilai()
+    {
+        return Excel::download(new UjiTExport, 'uji_T.xlsx');
+    }
+
+    public function importnilai(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        $file = $request->file('file');
+        $nama_file = $file->hashName();
+        $path = $file->storeAs('public/excel/', $nama_file);
+        $import = Excel::import(new UjiTImport(), storage_path('app/public/excel/' . $nama_file));
+        Storage::delete($path);
+        if ($import) {
+            //redirect
+            return redirect()->route('ujit.index')->with(['success' => 'Data Berhasil Diimport!']);
+        } else {
+            //redirect
+            return redirect()->route('ujit.index')->with(['error' => 'Data Gagal Diimport!']);
+        }
     }
 }

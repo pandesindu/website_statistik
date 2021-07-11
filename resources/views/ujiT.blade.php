@@ -1,6 +1,6 @@
 @extends('layout.v_template')
 
-@section('title', 'Liliefors')
+@section('title', 'Uji T Data Berkorelasi')
 @section('content')
 
 
@@ -108,13 +108,23 @@
                         <td></td>
                         <td></td>
                     </tr>
+
+                    <trr">
+                        <th>T Tabel: </th>
+                        <th> {{ $TTabel }}</th>
+                        </tr>
+
+                        <tr>
+                            <th>Status H0: </th>
+                            <th> {{ $status }}</th>
+                        </tr>
                 </tbody>
             </table>
 
 
             <div class=" col-12">
                 <div class="float-lg-right">
-                    <form action="{{route('importnilai')}}" method="POST" enctype="multipart/form-data"
+                    <form action="{{route('importUjiT')}}" method="POST" enctype="multipart/form-data"
                         class="form-inline">
                         @csrf
                         <div class="input-group">
@@ -135,7 +145,7 @@
             </div>
 
             <div class="col-2">
-                <div class="float-left"><a href="{{route('exportnilai')}}"> <button type="button"
+                <div class="float-left"><a href="{{route('exportUJiT')}}"> <button type="button"
                             class="btn btn-success">
                             <i class="fa fa-download mx-1" aria-hidden="true"></i> export</button></a></div>
             </div>

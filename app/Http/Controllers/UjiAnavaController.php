@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UjiAnavaExport;
+
+use App\Imports\UjiAnavaImport;
+use App\Models\Tb_F;
 use App\Models\UjiAnava;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UjiAnavaController extends Controller
 {
@@ -92,7 +98,7 @@ class UjiAnavaController extends Controller
 
         $JKA =  $a1 + $a2 + $a3 - $a4;
 
-     // mencari DKA 
+        // mencari DKA 
         $DKA = $k - 1;
 
         // mencari RJKA Rerata Jumlah Kuadrat Antara
@@ -138,7 +144,48 @@ class UjiAnavaController extends Controller
         $DKT = $DKD + $DKA;
 
         // dd($F);
+        //mengecek tabel f, butuh $DKA dan $DKD
+        //function cek label
+        function label($nilai){            
 
+            switch($nilai){
+                case '0': 
+                    $sLabel = 'nol';
+                    break;
+                case '1': 
+                    $sLabel = 'satu';
+                    break;
+                case '2': 
+                    $sLabel = 'dua';
+                    break;
+                case '3': 
+                    $sLabel = 'tiga';
+                    break;
+                case '4': 
+                    $sLabel = 'empat';
+                    break;
+                case '5': 
+                    $sLabel = 'lima';
+                    break;                
+                default: $sLabel = 'Tidak ada field';
+            }
+            
+            return $sLabel;
+        }
+
+        //1. cek label
+        $labelDKA = label($DKA);
+        
+        //2. cek di tabel f
+        $kolom = Tb_F::where('df1', '=', $DKD)->get();                 
+        $fTabel = $kolom[0]->$labelDKA;               
+
+        //cek keterangan
+        if ($F > $fTabel){
+            $status =  "Signifikan";
+        } else {
+            $status =   "Tidak Signifikan";
+        }
 
         return view('ujianava', ['anava' => $anava,
                                 'jumlahData'=>$jumlahData,
@@ -177,6 +224,11 @@ class UjiAnavaController extends Controller
                                 'jkt' => $JKT, 
                                 'dkt' => $DKT, 
                                 
+                                 //ftabel
+                                 'fTabel' => $fTabel,
+
+                                 //status
+                                 'status' => $status,
 
                                 ]);
     }
@@ -199,7 +251,22 @@ class UjiAnavaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $message = [
+            'required' => 'kolom harus diisi',
+            'date' => 'harus berupa tanggal',
+            'numeric' => 'input harus berupa angka'
+
+        ];
+        $validasi = $request->validate([
+            'x1' => 'required|numeric',
+            'x2' => 'required|numeric',
+            'x3' => 'required|numeric',
+
+        ], $message);
+        UjiAnava::create($validasi);
+        return redirect('anava')->with([
+            'success' => 'Data Tersimpan'
+        ]);
     }
 
     /**
@@ -221,7 +288,8 @@ class UjiAnavaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $nilai = UjiAnava::find($id);
+        return view('editanava', compact('nilai'));
     }
 
     /**
@@ -233,7 +301,21 @@ class UjiAnavaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $message = [
+            'required' => 'kolom harus diisi',
+            'numeric' => 'input harus berupa angka'
+
+        ];
+        $validasi = $request->validate([
+            'x1' => 'required|numeric',
+            'x2' => 'required|numeric',
+            'x3' => 'required|numeric',
+
+        ], $message);
+        UjiAnava::where('id', $id)->update($validasi);
+        return redirect('anava')->with([
+            'updated' => 'Data Berhasil Diperbaharui'
+        ]);
     }
 
     /**
@@ -244,6 +326,39 @@ class UjiAnavaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $nilai = UjiAnava::find($id);
+        if ($nilai != null) {
+            $nilai = UjiAnava::find($nilai->id);
+             UjiAnava::where('id', $id)->delete();
+        }
+        return redirect('anava')->with([
+            'deleted' => 'Data Berhasil Dihapus'
+        ]);;
     }
+
+    public function exportnilai()
+    {
+        return Excel::download(new UjiAnavaExport, 'uji_anava.xlsx');
+    }
+
+    public function importnilai(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        $file = $request->file('file');
+        $nama_file = $file->hashName();
+        $path = $file->storeAs('public/excel/', $nama_file);
+        $import = Excel::import(new UjiAnavaImport(), storage_path('app/public/excel/' . $nama_file));
+        Storage::delete($path);
+        if ($import) {
+            //redirect
+            return redirect()->route('anava.index')->with(['success' => 'Data Berhasil Diimport!']);
+        } else {
+            //redirect
+            return redirect()->route('anava.index')->with(['error' => 'Data Gagal Diimport!']);
+        }
+    }
+
+    
 }
